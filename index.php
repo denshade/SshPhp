@@ -1,3 +1,6 @@
+<?php 
+require_once("Console.php");
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -28,6 +31,7 @@ textarea {
 </style>
     </head>
     <body color="white">
+        <form name="subm" action="index.php" method="GET">
         Host  <input type="text"/><br/>
         Login <input type="text"/><br/>
         Pwd   <input type="text"/><br/>
@@ -38,18 +42,17 @@ textarea {
         if (isset($cmd) && $cmd != "")
         {
             $cmd = urldecode($cmd);
-            file_put_contents("logs", "\n>$cmd\n", FILE_APPEND);
+            Console::registerOutput("\n>$cmd\n");
             exec($cmd, $output, $exitcode);
             if ($exitcode !== 0)
             {
-                file_put_contents("logs", "\nERRNR:".$exitcode . "\n", FILE_APPEND);
+                Console::registerOutput("\nERRNR:".$exitcode . "\n");
             }
-            file_put_contents("logs", implode("\n",$output), FILE_APPEND);
+            Console::registerOutput(implode("\n",$output));
         }
-        echo file_get_contents("logs");
+        echo Console::getOutput();
         ?>
         </textarea><br/>
-        <form name="subm" action="index.php" method="GET">
         <input class="inputline" id="cmd" name="cmd" type="text"/>
         </form>
         <script >var textarea = document.getElementById('textarea');
