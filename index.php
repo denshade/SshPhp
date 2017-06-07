@@ -43,7 +43,9 @@ and open the template in the editor.
         <input type="text" name="pwd"/>
     </label><br/>
     <label>Cwd
-        <input type="text" name="cwd" value="<?php         $cwd = urldecode(filter_input(INPUT_GET, 'cwd', FILTER_SANITIZE_ENCODED));
+        <input type="text" name="cwd" value="<?php  
+        $cwd = urldecode(filter_input(INPUT_GET, 'cwd', FILTER_SANITIZE_ENCODED));
+        echo $cwd;
         ?>">
     </label><br/>
 
